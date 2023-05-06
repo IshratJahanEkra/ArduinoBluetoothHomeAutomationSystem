@@ -3,8 +3,8 @@
     Arduino Bluetooth Home Automation System 
 
   Participants:
-    Ishrat  Jahan Ekra
     Ayesha  Alam Riya
+    Ishrat  Jahan Ekra
     Baidika Achariya
     Ziniya  Afrin
   */
@@ -16,7 +16,8 @@
     5V signal => Relay ON  => Load ON
 */
 
-const int LIGHT = 8;  /* Using Arduino's digital pin number 7 to control light */
+#include <EEPROM.h>
+const int LIGHT = 8;  /* Using Arduino's digital pin number 8 to control light */
 
 void setup() {
 
@@ -24,8 +25,15 @@ void setup() {
   Serial.begin( 9600 );
 
   /* Set LIGHT pin as output to control it's voltage ( 0V or 5V)  */
-  pinMode( LIGHT , OUTPUT );
+  pinMode( LIGHT, OUTPUT );
 
+  /* Read EEPROM Memory to Restore  Last Status */
+  if ( EEPROM.read(LIGHT) ){
+      digitalWrite( LIGHT , HIGH ); /* Turn on  the LIGHT */
+  }
+  else if ( !EEPROM.read(LIGHT) ){
+      digitalWrite( LIGHT , LOW ); /* Turn on  the LIGHT */
+  }
 
 }
 
@@ -40,11 +48,12 @@ void loop() {
         /* Condition for controlling LIGHT */
         if ( data == 'L' ){
             digitalWrite( LIGHT , HIGH ); /* Turn on  the LIGHT */
+            EEPROM.write( LIGHT, true );  /* Store current status */
         }
         else if ( data == 'l' ){
             digitalWrite( LIGHT , LOW );  /* Turn off the LIGHT */
+            EEPROM.write( LIGHT, false ); /* Store current status */
         }
-
  
     }
 

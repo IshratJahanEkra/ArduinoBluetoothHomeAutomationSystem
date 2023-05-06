@@ -28,10 +28,10 @@ void setup() {
   pinMode( LIGHT, OUTPUT );
 
   /* Read EEPROM Memory to Restore  Last Status */
-  if ( EEPROM.read(LIGHT) ){
+  if ( EEPROM.read(LIGHT) == true ){
       digitalWrite( LIGHT , HIGH ); /* Turn on  the LIGHT */
   }
-  else if ( !EEPROM.read(LIGHT) ){
+  else if ( EEPROM.read(LIGHT) == false ){
       digitalWrite( LIGHT , LOW ); /* Turn on  the LIGHT */
   }
 
